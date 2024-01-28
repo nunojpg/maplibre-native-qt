@@ -175,6 +175,8 @@ public:
     void destroyRenderer();
     void setFramebufferObject(quint32 fbo, const QSize &size);
 
+    bool copyTextStyle(std::string from_layer_in_style, std::string to_layer) const;
+
 public slots:
     void render();
     void setConnectionEstablished();

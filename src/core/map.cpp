@@ -62,6 +62,7 @@
 #include <QtGui/QColor>
 
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <sstream>
 
@@ -413,6 +414,21 @@ Map::Map(QObject *parent, const Settings &settings, const QSize &size, qreal pix
 }
 
 Map::~Map() = default;
+
+bool Map::copyTextStyle(std::string from_name, std::string to_name) const {
+    auto from = reinterpret_cast<mbgl::style::SymbolLayer *>(d_ptr->mapObj->getStyle().getLayer(from_name));
+    if (!from) return false;
+    auto to = reinterpret_cast<mbgl::style::SymbolLayer *>(d_ptr->mapObj->getStyle().getLayer(to_name));
+    if (!to) throw std::runtime_error("destination layer doesn't exist");
+    to->setTextFont(from->getTextFont());
+    to->setTextSize(from->getTextSize());
+    to->setTextPadding(from->getTextPadding());
+    to->setTextColor(from->getTextColor());
+    to->setTextHaloBlur(from->getTextHaloBlur());
+    to->setTextHaloColor(from->getTextHaloColor());
+    to->setTextHaloWidth(from->getTextHaloWidth());
+    return true;
+}
 
 /*!
     \property Map::styleJson
